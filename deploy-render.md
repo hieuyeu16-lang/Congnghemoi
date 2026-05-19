@@ -21,6 +21,15 @@
 4. Add environment variable:
    - VITE_API_URL: `https://[your-backend-service].onrender.com`
 
+## CLI Deploy (Windows)
+
+1. Install Render CLI if needed:
+   - `npm install -g @renderinc/cli`
+2. Set API key in PowerShell:
+   - `setx RENDER_API_KEY "<your_key>"`
+3. Run deploy helper:
+   - `.\deploy-render.ps1`
+
 ## Database Setup
 
 1. Create a PostgreSQL database on Render

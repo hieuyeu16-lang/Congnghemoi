@@ -20,4 +20,4 @@ services:
     publishPath: dist
     envVars:
       - key: VITE_API_URL
-        value: "https://congnghemoi-7hho.onrender.com"
+        value: "https://<backend-service>.onrender.com"
