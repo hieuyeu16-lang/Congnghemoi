@@ -169,7 +169,8 @@ docker compose down
 2. Install Docker and Docker Compose.
 3. Clone this repository.
 4. Copy `.env.example` to `.env` and set production values.
-5. Run `docker compose up -d`.
+5. Run `docker compose -f docker-compose.prod.yml up -d`.
+6. Access frontend on the server's public IP at port 3000.
 
 ### Option 3: Vercel
 1. Connect the GitHub repo to Vercel.
