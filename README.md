@@ -154,7 +154,7 @@ docker compose down
    - Build command: `npm install && npm run build`
    - Publish directory: `dist`
    - Set environment variable:
-     - `VITE_API_URL` = your backend public URL, for example `https://task-booking-backend.onrender.com`
+     - `VITE_API_URL` = `https://congnghemoi-7hho.onrender.com`
 4. Use `render.yaml` in the repo to keep both services configuration versioned.
 5. Add `RENDER_API_KEY` as a GitHub secret in this repository if you want automatic deploys from the Render workflow.
 6. Push to `main` to trigger Render deploy and GitHub CI.
