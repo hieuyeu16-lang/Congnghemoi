@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import logo from './assets/logo.svg';
 
 const apiUrl = import.meta.env.VITE_API_URL || '';
+const apiBase = apiUrl || '';
 
 function App() {
   const [health, setHealth] = useState(null);
@@ -11,15 +12,10 @@ function App() {
   const [showList, setShowList] = useState(true);
 
   useEffect(() => {
-    if (!apiUrl) {
-      setError('VITE_API_URL chưa được cấu hình. Vui lòng kiểm tra .env hoặc cấu hình môi trường.');
-      return;
-    }
-
     async function load() {
       try {
-        const healthRes = await fetch(`${apiUrl}/api/health`);
-        const bookingsRes = await fetch(`${apiUrl}/api/bookings`);
+        const healthRes = await fetch(`${apiBase}/api/health`);
+        const bookingsRes = await fetch(`${apiBase}/api/bookings`);
         if (!healthRes.ok) throw new Error('Không thể kết nối tới backend');
         const healthData = await healthRes.json();
         const bookingsData = await bookingsRes.json();
