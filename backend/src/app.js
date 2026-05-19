@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import healthRouter from './routes/health.js';
@@ -5,8 +6,6 @@ import tasksRouter from './routes/tasks.js';
 import bookingsRouter from './routes/bookings.js';
 
 const app = express();
-// Allow common dev frontend origins so the browser can call the API when
-// frontend is served from different dev servers or containers.
 const allowedOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
@@ -19,6 +18,15 @@ app.use(express.json());
 app.use('/api/health', healthRouter);
 app.use('/api/tasks', tasksRouter);
 app.use('/api/bookings', bookingsRouter);
+
+const staticPath = path.resolve(process.cwd(), 'dist');
+app.use(express.static(staticPath));
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+  res.sendFile(path.join(staticPath, 'index.html'));
+});
 
 app.get('/api/test', async (req, res) => {
   try {

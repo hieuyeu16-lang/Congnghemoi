@@ -1,14 +1,17 @@
-FROM node:18-alpine AS base
-WORKDIR /app
+FROM node:18-alpine AS frontend-build
+WORKDIR /frontend
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install
+COPY frontend ./
+RUN npm run build
 
-# Copy backend manifest and install production deps
+FROM node:18-alpine AS backend
+WORKDIR /app
 COPY backend/package.json backend/package-lock.json* ./
 RUN npm install --production
-
-# Copy backend source code
 COPY backend/src ./src
 COPY backend/.env.example ./
-
+COPY --from=frontend-build /frontend/dist ./dist
 ENV NODE_ENV=production
 EXPOSE 4000
 CMD ["node", "src/index.js"]
