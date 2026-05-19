@@ -23,9 +23,21 @@ function Test-Port {
 Write-Host "`n📝 Setting up environment..." -ForegroundColor $Blue
 if (!(Test-Path ".env")) {
     Copy-Item ".env.example" ".env"
-    Write-Host "✅ Created .env from .env.example" -ForegroundColor $Green
+    Write-Host "✅ Created root .env from .env.example" -ForegroundColor $Green
 } else {
-    Write-Host "⚠️  .env already exists" -ForegroundColor $Yellow
+    Write-Host "⚠️  Root .env already exists" -ForegroundColor $Yellow
+}
+if (!(Test-Path "backend\.env")) {
+    Copy-Item ".env.example" "backend\.env"
+    Write-Host "✅ Created backend\.env from .env.example" -ForegroundColor $Green
+} else {
+    Write-Host "⚠️  backend\.env already exists" -ForegroundColor $Yellow
+}
+if (!(Test-Path "frontend\.env")) {
+    Copy-Item ".env.example" "frontend\.env"
+    Write-Host "✅ Created frontend\.env from .env.example" -ForegroundColor $Green
+} else {
+    Write-Host "⚠️  frontend\.env already exists" -ForegroundColor $Yellow
 }
 
 # Start backend
@@ -123,10 +135,14 @@ Set-Location ..
 Write-Host "`n🚨 Simulating Incidents..." -ForegroundColor $Blue
 
 Write-Host "1. Testing environment variables..." -ForegroundColor $Yellow
-$content = Get-Content ".env"
-$content | Where-Object { $_ -notmatch "^VITE_API_URL=" } | Set-Content ".env.temp"
-Move-Item ".env.temp" ".env" -Force
-Write-Host "⚠️  Removed VITE_API_URL from .env" -ForegroundColor $Yellow
+foreach ($path in ".env", "frontend\.env") {
+    if (Test-Path $path) {
+        $content = Get-Content $path
+        $content | Where-Object { $_ -notmatch "^VITE_API_URL=" } | Set-Content "$path.temp"
+        Move-Item "$path.temp" $path -Force
+        Write-Host "⚠️  Removed VITE_API_URL from $path" -ForegroundColor $Yellow
+    }
+}
 Write-Host "   Frontend should show API errors" -ForegroundColor $Yellow
 
 Write-Host "2. Testing backend failure..." -ForegroundColor $Yellow
@@ -140,8 +156,10 @@ try {
 }
 
 # Restore environment
-Copy-Item ".env.example" ".env" -Force
-Write-Host "✅ Restored .env from .env.example" -ForegroundColor $Green
+foreach ($path in ".env", "backend\.env", "frontend\.env") {
+    Copy-Item ".env.example" $path -Force
+    Write-Host "✅ Restored $path from .env.example" -ForegroundColor $Green
+}
 
 # Restart backend
 $backendJob = Start-Job -ScriptBlock { param($path) Set-Location $path; npm start } -ArgumentList "$scriptRoot\backend"

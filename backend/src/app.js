@@ -32,6 +32,7 @@ app.get('/api/test', async (req, res) => {
 
 app.use((err, req, res, next) => {
   console.error('Unhandled error', err);
+  void next;
   res.status(500).json({ error: 'Internal server error' });
 });
 
