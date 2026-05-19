@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Reject commit messages that look like a vague 'final' commit or single-line '1 lần cuối'
+MSG_FILE="$1"
+MSG=$(cat "$MSG_FILE" | tr '\n' ' ')
+# Patterns to reject (Vietnamese and English common phrases)
+RE='(lầ?n cu[oác]i|1 lầ?n cu[oác]i|1 lần cuối|lần cuối|final commit|^final$|^final\scommit$|final\s*$)'
+if echo "$MSG" | grep -Eiq "$RE"; then
+  echo "ERROR: Commit message appears to be a finalizing commit."
+  echo "Please split changes into meaningful commits and use descriptive messages."
+  echo "Example: feat(bookings): add create and delete endpoints"
+  exit 1
+fi
+# Enforce conventional commit-like header (type(scope): description)
+if ! echo "$MSG" | grep -Eq '^(feat|fix|docs|style|refactor|test|chore)(\([a-zA-Z0-9_\- ]+\))?: .+'; then
+  echo "ERROR: Commit message does not follow required format." >&2
+  echo "Use: type(scope): short description" >&2
+  echo "Examples: feat(bookings): add create endpoint" >&2
+  exit 1
+fi
+exit 0

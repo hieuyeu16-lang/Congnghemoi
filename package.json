@@ -1,0 +1,23 @@
+{
+  "name": "congnghemoi",
+  "version": "1.0.0",
+  "description": "Task management demo project",
+  "private": true,
+  "scripts": {
+    "demo": "./demo.sh",
+    "demo:node": "./demo-node.sh",
+    "demo:ps": ".\\demo.ps1",
+    "test-ci": "./test-ci.sh",
+    "simulate-incidents": "./simulate-incidents.sh",
+    "check-demo": "./check-demo.sh",
+    "start": "docker compose up -d",
+    "stop": "docker compose down",
+    "logs": "docker compose logs -f",
+    "restart": "docker compose restart",
+    "build": "docker compose build",
+    "clean": "docker compose down -v --remove-orphans"
+  },
+  "keywords": ["task", "management", "devops", "docker", "demo"],
+  "author": "DevOps Team",
+  "license": "MIT"
+}

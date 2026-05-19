@@ -1,0 +1,23 @@
+services:
+  - type: web_service
+    name: task-booking-backend
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: PORT
+        value: "4000"
+      # Set DATABASE_URL in Render dashboard secrets for production
+
+  - type: static_site
+    name: task-booking-frontend
+    env: static
+    plan: free
+    branch: main
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: "https://<your-backend-url>"
